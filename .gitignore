@@ -1,0 +1,8 @@
+node_modules
+dist
+.tmp
+bower_components
+.idea
+/vendor
+config.ini
+*.log

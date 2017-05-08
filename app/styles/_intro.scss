@@ -1,0 +1,69 @@
+.section.intro {
+  position: relative;
+  height: 100vh;
+  padding: 15px;
+  text-align: center;
+  white-space: nowrap;
+  user-select: none;
+
+  &:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -0.25em;
+  }
+
+  a {
+    color: #fff;
+    text-decoration: none;
+
+    &:hover {
+      color: $green;
+    }
+  }
+
+  .middle {
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    vertical-align: middle;
+    white-space: normal;
+    user-select: initial;
+
+    h1 {
+      margin: 10px 0 0 0;
+      font-size: 1.5rem;
+      font-weight: 300;
+      letter-spacing: 1px;
+      line-height: 1.4;
+
+      strong {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .go-down {
+    position: absolute;
+    z-index: 2;
+    bottom: 15px;
+    left: 50%;
+    transform: translate3d(-50%, 0, 0);
+    user-select: initial;
+
+    .no-js & {
+      display: none;
+    }
+  }
+
+  .particles {
+    .no-js & {
+      background: url('/images/intro-particles.jpg') center;
+      background-size: cover;
+    }
+  }
+}

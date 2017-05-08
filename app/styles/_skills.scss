@@ -1,0 +1,81 @@
+.section.skills {
+  > *:not(.particles) {
+    position: relative;
+    z-index: 2;
+  }
+
+  article {
+    max-width: $max-content-width;
+    margin: 0 auto;
+    padding: 20px 0 0 0;
+
+    > p {
+      opacity: 0;
+      transform: translateY(100%);
+      font-size: 1.25rem;
+      line-height: 1.5;
+      transition: all 500ms;
+
+      &.active, .no-js & {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    > ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      list-style: none;
+      margin: 50px 0 0 0;
+      padding: 0;
+
+      li {
+        position: relative;
+        flex: 0 1 25%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transform: scale(0);
+        margin: 0 20px 40px 20px;
+        padding: 15px 30px;
+        background: linear-gradient(45deg, #efefef 0%, #f1ffeb 100%);
+        border-bottom: 3px solid $green;
+        color: $dark-gray;
+        transition: all 500ms;
+
+        &:after {
+          content: '';
+          position: absolute;
+          bottom: -3px;
+          left: 0;
+          border-right: 10px solid transparent;
+          border-bottom: 10px solid #5AC032;
+        }
+
+        &.active, .no-js & {
+          opacity: 1;
+          transform: scale(1);
+        }
+
+        @media screen and (max-width: 767px) {
+          flex-basis: 40%;
+          margin: 0 10px 20px 10px;
+          padding: 15px 20px;
+        }
+      }
+    }
+  }
+
+  .resume {
+    margin: 20px 0 0 0;
+  }
+
+  .particles {
+    .no-js & {
+      background: url('/images/skills-particles.jpg') center;
+      background-size: cover;
+    }
+  }
+}

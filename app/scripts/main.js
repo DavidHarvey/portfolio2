@@ -388,7 +388,7 @@ $(document).ready(function () {
   $sectionSkills.find('article > p, .resume').each(function(i, el) {
     registerScrollInEvent($(el), function ($el) {
       $el.addClass('active');
-    }, 100);
+    });
   });
 
   $sectionSkills.find('article > ul li').each(function(i, el) {
@@ -400,19 +400,19 @@ $(document).ready(function () {
   $sectionContact.find('article > p, form button[type="submit"]').each(function(i, el) {
     registerScrollInEvent($(el), function ($el) {
       $el.addClass('active');
-    }, 100);
+    });
   });
 
   $sectionContact.find('form > fieldset').each(function(i, el) {
     registerScrollInEvent($(el), function ($el) {
       $el.addClass('active');
-    }, 100);
+    }, ($(el).outerHeight() / 4) * -1);
   });
 
   $sectionContact.find('.social a').each(function(i, el) {
     registerScrollInEvent($(el), function ($el) {
       $el.addClass('active');
-    }, 100);
+    }, 50);
   });
 
 

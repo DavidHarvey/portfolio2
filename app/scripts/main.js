@@ -118,7 +118,7 @@ $(document).ready(function () {
    **********************************/
 
   $(window).scroll(function() {
-    var currentY = window.pageYOffset;
+    var currentY = $(window).scrollTop();
     //Only update on vertical scroll change
     if (prevY !== currentY) {
       if (!preventScrollSectionChange && !initialLoad) {

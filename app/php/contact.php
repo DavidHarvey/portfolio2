@@ -1,7 +1,13 @@
 <?php
 
+//User got here directly or posted nothing. What.
+if (empty($_POST)) {
+    echo '<strong>Error:</strong> This script expects form data.';
+    return;
+}
+
 //We support non-ajax requests to be nice to those without JS enabled
-$ajax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+$ajax = !empty($_POST['ajax']);
 
 //Required stuff
 if (empty($_POST['email']) || empty($_POST['message'])) {

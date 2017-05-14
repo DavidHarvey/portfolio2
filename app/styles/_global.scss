@@ -85,7 +85,7 @@ textarea {
   }
 
   &.has-logo {
-    > .logo {
+    .logo-link {
       left: 5px;
     }
 
@@ -94,15 +94,16 @@ textarea {
     }
   }
 
-  > .logo {
+  .logo-link {
     display: inline-block;
     position: absolute;
     top: 5px;
     left: -$nav-logo-width;
     transition: left 250ms;
 
-    img {
+    .logo {
       width: $nav-logo-width;
+      height: $nav-logo-width;
     }
   }
 
@@ -182,7 +183,7 @@ textarea {
     justify-content: center;
 
     &.has-logo {
-      > .logo {
+      .logo-link {
         left: -$nav-logo-width;
       }
 
@@ -340,6 +341,12 @@ textarea {
       left: 50%;
       transform: translate3d(-50%, -50%, 0) scale(0);
       transition: all 250ms;
+
+      .icon-spinner {
+        height: 1em;
+        font-size: 2em;
+        animation: icon-spin 2s infinite linear;
+      }
     }
 
     &.loading {
@@ -361,7 +368,7 @@ textarea {
 .main-footer {
   position: relative;
   overflow: hidden;
-  padding: 50px 15px 80px 15px;
+  padding: 50px 15px 5rem 15px;
   text-align: center;
   color: rgba(#fff, 0.7);
   font-size: 0.9rem;
@@ -403,6 +410,8 @@ textarea {
     position: absolute;
     left: 50%;
     bottom: 0;
+    width: 4rem;
+    height: 4rem;
     padding: 15px;
     transform: translate3d(-50%, 50%, 0) rotate(45deg);
     color: #fff;
@@ -417,12 +426,16 @@ textarea {
       left: 0;
       background: $green;
       transition: transform 250ms;
+      transform-origin: center;
     }
 
     i {
-      position: relative;
+      position: absolute;
       z-index: 2;
-      transform: translate3d(-13px, -13px, 0) rotate(-45deg);
+      top: 0;
+      left: 0.25rem;
+      transform: rotate(-45deg);
+      font-size: 2rem;
     }
 
     &:hover {

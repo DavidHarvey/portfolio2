@@ -40,6 +40,33 @@ $(document).ready(function () {
    * Methods
    **********************************/
 
+  function getScrollPos() {
+    return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+  }
+
+  //adapted from https://stackoverflow.com/questions/21474678/scrolltop-animation-without-jquery
+  function scrollTo(to, duration, cb) {
+    var cosParameter = (getScrollPos() - to) / 2,
+      scrollCount = 0,
+      oldTimestamp = window.performance.now();
+
+    function step (newTimestamp) {
+      scrollCount += Math.PI / (duration / (newTimestamp - oldTimestamp));
+
+      if (scrollCount >= Math.PI) {
+        if ($.isFunction(cb)) {
+          cb();
+        }
+        return;
+      }
+
+      window.scrollTo(0, Math.round(to + cosParameter + cosParameter * Math.cos(scrollCount)));
+      oldTimestamp = newTimestamp;
+      window.requestAnimationFrame(step);
+    }
+    window.requestAnimationFrame(step);
+  }
+
   function gotoPage(page) {
     history.replaceState({page: page}, '', page === 'home' ? '/' : page);
     $(window).trigger('popstate');
@@ -56,7 +83,7 @@ $(document).ready(function () {
   }
 
   function inViewport($el) {
-    var elH = $el.outerHeight(),
+    var elH = $el.height(),
       H   = window.innerHeight,
       r   = $el[0].getBoundingClientRect(), t=r.top, b=r.bottom;
     return Math.max(0, t>0? Math.min(elH, H-t) : (b<H?b:H));
@@ -118,15 +145,17 @@ $(document).ready(function () {
    **********************************/
 
   $(window).scroll(function() {
-    var currentY = $(window).scrollTop();
+    var currentY = getScrollPos();
     //Only update on vertical scroll change
     if (prevY !== currentY) {
+      var viewHeight = document.documentElement.clientHeight;
+
       if (!preventScrollSectionChange && !initialLoad) {
         //Change url if a new section has the majority of screen height
         $sections.each(function (i, el) {
           var $el = $(el);
           var section = $el.data('section');
-          if (inViewport($el) > window.innerHeight / 2 && currentSection !== section) {
+          if (inViewport($el) > viewHeight / 2 && currentSection !== section) {
             preventScrollSectionAnim = true;
             gotoPage(section);
           }
@@ -161,7 +190,7 @@ $(document).ready(function () {
 
       //Same with the skills particles
       if (skillsParticles) {
-        var visible = currentY + window.innerHeight > scrollPoints.skillsParticlesTop &&
+        var visible = currentY + viewHeight > scrollPoints.skillsParticlesTop &&
                       currentY < scrollPoints.skillsParticlesBottom;
         if (!skillsParticles.active && visible) {
           particlesJS.resume(skillsParticles);
@@ -174,7 +203,7 @@ $(document).ready(function () {
       var s = scrollInElements.length;
       while (s--) {
         var scrollIn = scrollInElements[s];
-        if ((currentY + window.innerHeight) > scrollIn.pos) {
+        if ((currentY + viewHeight) > scrollIn.pos) {
           scrollIn.handler(scrollIn.$el);
           scrollInElements.splice(scrollInElements.indexOf(scrollIn), 1);
         }
@@ -185,7 +214,7 @@ $(document).ready(function () {
   });
 
   $(window).resize(function() {
-    var currentW = window.innerWidth;
+    var currentW = document.documentElement.clientWidth;
     //Only update on width change
     if (prevW !== currentW) {
       //Update scroll detection points
@@ -226,9 +255,7 @@ $(document).ready(function () {
 
         } else {
           var scrollAnimComplete = false;
-          $('html, body').animate({
-            scrollTop: $target.offset().top
-          }, 250, function () {
+          scrollTo($target.offset().top, 250, function() {
             if (!scrollAnimComplete) {
               scrollAnimComplete = true;
               afterPopScroll();
@@ -315,50 +342,53 @@ $(document).ready(function () {
     contactSending = true;
     $contactForm.find('button[type="submit"]').attr('disabled', 'disabled').addClass('loading');
 
-    var post = $.post($contactForm.attr('action'), {
-      name: $contactForm.find('#contact-name').val(),
-      email: $contactEmail.val(),
-      message: $contactMessage.val(),
-      url: $contactForm.find('#contact-url').val()
-    }, function (res) {
-      res = $.parseJSON(res);
+    $.ajax({
+      type: 'POST',
+      url: $contactForm.attr('action'),
+      dataType: 'json',
+      data: {
+        ajax: true,
+        name: $contactForm.find('#contact-name').val(),
+        email: $contactEmail.val(),
+        message: $contactMessage.val(),
+        url: $contactForm.find('#contact-url').val()
+      },
+      complete: function() {
+        //Ensure the form always unlocks regardless of error state
+        $contactForm.find('button[type="submit"]').removeAttr('disabled').removeClass('loading');
+        $contactForm.children('fieldset').removeClass('valid error');
+        contactSending = false;
+      },
+      success: function(res) {
+        if (res.error) {
+          //Something broke on the server welp
+          $contactForm.addClass('has-alert');
+          $contactForm.find('.send-error').addClass('active')
+            .find('.error-code').text(res.code ? '(Err: ' + res.code + ')' : '');
 
-      if (res.error) {
+        } else if (res.errors) {
+          //User got validation errors (bypassed the html/js rules?)
+          $.each(res.errors, function (type, message) {
+            if (type === 'email') {
+              toggleErrorTip('show', $contactEmail, message);
+            } else if (type === 'message') {
+              toggleErrorTip('show', $contactMessage, message);
+            }
+          });
+
+        } else if (res.success) {
+          //Message actually went through!
+          $contactForm.get(0).reset();
+          $contactForm.addClass('has-alert');
+          $contactForm.find('.send-success').addClass('active');
+        }
+      },
+      error: function() {
         //Something broke on the server welp
         $contactForm.addClass('has-alert');
         $contactForm.find('.send-error').addClass('active')
-          .find('.error-code').text(res.code ? '(Err: ' + res.code + ')' : '');
-
-      } else if (res.errors) {
-        //User got validation errors (bypassed the html/js rules?)
-        $.each(res.errors, function (type, message) {
-          if (type === 'email') {
-            toggleErrorTip('show', $contactEmail, message);
-          } else if (type === 'message') {
-            toggleErrorTip('show', $contactMessage, message);
-          }
-        });
-
-      } else if (res.success) {
-        //Message actually went through!
-        $contactForm.get(0).reset();
-        $contactForm.addClass('has-alert');
-        $contactForm.find('.send-success').addClass('active');
+          .find('.error-code').text('(Err: 99)');
       }
-    });
-
-    post.fail(function () {
-      //Something broke on the server welp
-      $contactForm.addClass('has-alert');
-      $contactForm.find('.send-error').addClass('active')
-        .find('.error-code').text('(Err: 99)');
-    });
-
-    post.always(function () {
-      //Ensure the form always unlocks regardless of error state
-      $contactForm.find('button[type="submit"]').removeAttr('disabled').removeClass('loading');
-      $contactForm.children('fieldset').removeClass('valid error');
-      contactSending = false;
     });
   });
 
@@ -367,7 +397,7 @@ $(document).ready(function () {
    * Scroll-in visibility effects
    **********************************/
 
-  $sections.not($sectionIntro).find('> header .title').each(function(i, el) {
+  $sections.not($sectionIntro).find('header .title').each(function(i, el) {
     registerScrollInEvent($(el), function($el) {
       $el.addClass('active');
     }, 100);
@@ -376,13 +406,13 @@ $(document).ready(function () {
   $sectionWork.find('.showcase .item .logo').each(function(i, el) {
     registerScrollInEvent($(el), function ($el) {
       $el.addClass('active');
-    }, 200);
+    }, 100);
   });
 
   $sectionWork.find('.showcase .item .info').each(function(i, el) {
     registerScrollInEvent($(el), function ($el) {
       $el.addClass('active');
-    });
+    }, 100);
   });
 
   $sectionSkills.find('article > p, .resume').each(function(i, el) {
@@ -406,13 +436,13 @@ $(document).ready(function () {
   $sectionContact.find('form > fieldset').each(function(i, el) {
     registerScrollInEvent($(el), function ($el) {
       $el.addClass('active');
-    }, ($(el).outerHeight() / 4) * -1);
+    }, ($(el).height() / 4) * -1);
   });
 
   $sectionContact.find('.social a').each(function(i, el) {
     registerScrollInEvent($(el), function ($el) {
       $el.addClass('active');
-    }, 50);
+    });
   });
 
 
@@ -429,8 +459,10 @@ $(document).ready(function () {
     var html = $el.html();
     $el.empty();
     $el.append('<span class="before-load">' + html + '</span>')
-      .append('<span class="loader"><i class="fa fa-spinner fa-2x fa-spin fa-fw" aria-hidden="true"></i></span>');
+      .append('<span class="loader"><i class="icon-spinner" aria-hidden="true"></i></span>');
   });
+
+  $sectionIntro.addClass('active');
 
   $(window).trigger('resize');
   $(window).trigger('popstate');

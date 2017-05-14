@@ -5,7 +5,7 @@
     <meta name="description" content="Web Developer in Ottawa, Canada specialising in Front End Web Development">
     <meta name="author" content="David Harvey">
     <meta name="robots" content="index, follow">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>David Harvey | Web Developer</title>
 
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
@@ -49,7 +49,21 @@
 
     <section class="section intro" data-section="home">
       <header class="middle">
-        <img src="/images/logo.png" alt="Logo" class="logo" />
+        <svg class="logo" version="1.1" width="100%" height="100%" viewBox="0 0 200.000000 200.000000"
+             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <g class="logo-group" transform="translate(0.000000,200.000000) scale(0.100000,-0.100000)"
+             fill="#ffffff" stroke="none">
+            <path class="logo-outline"
+                  d="M0 1000 l0 -1000 1000 0 1000 0 0 1000 0 1000 -1000 0 -1000 0 0 -1000z m1870 0 l0 -870 -870 0 -870 0 0 870 0 870 870 0 870 0 0 -870z"
+                  stroke="none" fill-rule="evenodd"></path>
+            <path class="logo-d"
+                  d="M880 1125 l0 -555 -170 0 -170 0 0 165 0 165 130 0 130 0 0 120 0 120 -250 0 -250 0 0 -405 0 -405 410 0 410 0 0 675 0 675 -120 0 -120 0 0 -555z"
+                  stroke="none" fill-rule="evenodd"></path>
+            <path class="logo-h"
+                  d="M1200 1020 l0 -120 125 0 125 0 0 -285 0 -285 120 0 120 0 0 405 0 405 -245 0 -245 0 0 -120z"
+                  stroke="none" fill-rule="evenodd"></path>
+          </g>
+        </svg>
 
         <h1>
             Hi, I'm David, a front end web developer based in Ottawa, Canada.<br>
@@ -58,15 +72,29 @@
       </header>
 
       <a href="/work" class="go-down">
-        <i class="fa fa-chevron-down fa-2x" aria-hidden="true" title="Go Down"></i>
+        <i class="icon-chevron-down" aria-hidden="true" title="Go Down"></i>
       </a>
 
       <div id="intro-particles" class="particles"></div>
     </section>
 
     <nav id="main-nav" class="main-nav">
-      <a href="/home" class="logo" aria-hidden="true">
-        <img src="/images/logo.png" alt="Logo" />
+      <a href="/home" class="logo-link" aria-hidden="true">
+        <svg class="logo" version="1.1" width="100%" height="100%" viewBox="0 0 200.000000 200.000000"
+             xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <g class="logo-group" transform="translate(0.000000,200.000000) scale(0.100000,-0.100000)"
+             fill="#ffffff" stroke="none">
+            <path class="logo-outline"
+                  d="M0 1000 l0 -1000 1000 0 1000 0 0 1000 0 1000 -1000 0 -1000 0 0 -1000z m1870 0 l0 -870 -870 0 -870 0 0 870 0 870 870 0 870 0 0 -870z"
+                  stroke="none" fill-rule="evenodd"></path>
+            <path class="logo-d"
+                  d="M880 1125 l0 -555 -170 0 -170 0 0 165 0 165 130 0 130 0 0 120 0 120 -250 0 -250 0 0 -405 0 -405 410 0 410 0 0 675 0 675 -120 0 -120 0 0 -555z"
+                  stroke="none" fill-rule="evenodd"></path>
+            <path class="logo-h"
+                  d="M1200 1020 l0 -120 125 0 125 0 0 -285 0 -285 120 0 120 0 0 405 0 405 -245 0 -245 0 0 -120z"
+                  stroke="none" fill-rule="evenodd"></path>
+          </g>
+        </svg>
       </a>
 
       <ul class="page-links">
@@ -242,7 +270,9 @@
             <button type="submit" class="dh-btn loading-enabled">Send</button>
 
             <div class="alert send-error">
-              <button type="button" class="close"><i class="fa fa-times fa-lg"></i></button>
+              <button type="button" class="close">
+                <i class="icon-cross" aria-hidden="true" title="Close"></i>
+              </button>
               <p>
                 <strong>Oh dear!</strong> There was an error sending your email, please try again.
                 <span class="error-code"></span>
@@ -254,7 +284,9 @@
             </div>
 
             <div class="alert send-success">
-              <button type="button" class="close"><i class="fa fa-times fa-lg"></i></button>
+              <button type="button" class="close">
+                <i class="icon-cross" aria-hidden="true" title="Close"></i>
+              </button>
               <p>
                 <strong>Thanks!</strong> Your message has been sent and I will get back to you as soon as I can.
               </p>
@@ -266,13 +298,13 @@
           <ul class="social">
             <li>
               <a href="https://www.linkedin.com/in/dharveydev/" target="_blank">
-                <i class="fa fa-linkedin-square fa-2x" aria-hidden="true" title="LinkedIn"></i>
+                <i class="icon-linkedin" aria-hidden="true" title="LinkedIn"></i>
                 <span class="sr-only">LinkedIn</span>
               </a>
             </li>
             <li>
               <a href="https://github.com/DavidHarvey" target="_blank">
-                <i class="fa fa-github-square fa-2x" aria-hidden="true" title="Github"></i>
+                <i class="icon-github" aria-hidden="true" title="Github"></i>
                 <span class="sr-only">Github</span>
               </a>
             </li>
@@ -285,11 +317,12 @@
       <article>
         <p class="left">The end!</p>
         <p class="right">
-          Site created with ❤ by myself. <a href="https://github.com/DavidHarvey/portfolio2">Source available</a>.<br>
+          Site created with ❤ by myself.
+          <a href="https://github.com/DavidHarvey/portfolio2" target="_blank">Source available</a>.<br>
           All logos are copyright to their respective owners.
         </p>
         <a href="/home" class="go-top">
-          <i class="fa fa-chevron-up fa-2x"></i>
+          <i class="icon-chevron-up" aria-hidden="true" title="Back to Top"></i>
           <span class="sr-only">Back to Top</span>
         </a>
       </article>
@@ -297,7 +330,7 @@
 
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
-    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/zepto/zepto.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     
@@ -312,7 +345,6 @@
     <!--Piwik-->
     <script type="text/javascript">
       var _paq = _paq || [];
-      // tracker methods like "setCustomDimension" should be called before "trackPageView"
       _paq.push(['trackPageView']);
       _paq.push(['enableLinkTracking']);
       (function() {

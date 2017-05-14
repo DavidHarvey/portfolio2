@@ -1,7 +1,7 @@
 .section.intro {
   position: relative;
   height: 100vh;
-  padding: 15px;
+  padding: $nav-height 15px 30px 15px;
   text-align: center;
   white-space: nowrap;
   user-select: none;
@@ -31,12 +31,31 @@
     white-space: normal;
     user-select: initial;
 
+    .logo {
+      width: 100px;
+      height: 100px;
+
+      .logo-outline {
+        opacity: 0;
+        transition: all 500ms 250ms;
+      }
+
+      .logo-d, .logo-h {
+        opacity: 0;
+        transform: translate3d(0, 300%, 0);
+        transition: all 500ms;
+      }
+    }
+
     h1 {
+      position: relative;
       margin: 10px 0 0 0;
       font-size: 1.5rem;
       font-weight: 300;
       letter-spacing: 1px;
       line-height: 1.4;
+      transform: translate3d(0, 100%, 0);
+      transition: transform 500ms;
 
       strong {
         display: block;
@@ -52,8 +71,12 @@
     z-index: 2;
     bottom: 15px;
     left: 50%;
-    transform: translate3d(-50%, 0, 0);
+    opacity: 0;
+    transform: translate3d(-50%, -100%, 0);
     user-select: initial;
+    font-size: 2rem;
+    line-height: 1;
+    transition: transform 500ms, opacity 500ms;
 
     .no-js & {
       display: none;
@@ -64,6 +87,30 @@
     .no-js & {
       background: url('/images/intro-particles.jpg') center;
       background-size: cover;
+    }
+  }
+
+  &.active, .no-js & {
+    .middle {
+      .logo {
+        .logo-outline {
+          opacity: 1;
+        }
+
+        .logo-d, .logo-h {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+      }
+
+      h1 {
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    .go-down {
+      opacity: 1;
+      transform: translate3d(-50%, 0, 0);
     }
   }
 }

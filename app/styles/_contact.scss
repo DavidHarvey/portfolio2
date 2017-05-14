@@ -193,7 +193,12 @@
         border: 0;
         cursor: pointer;
         color: #fff;
+        line-height: 0.5rem;
         transition: all 250ms;
+
+        i {
+          font-size: 1.25rem;
+        }
 
         &:hover {
           transform: rotate(180deg);
@@ -234,15 +239,24 @@
 
     a {
       display: inline-block;
-      padding: 15px 20px;
+      padding: 17px 20px;
       background: linear-gradient(to top, $green 50%, $dark-gray 50%);
       background-size: 100% 200%;
+      border-radius: 0;
       transform: scale(0);
-      transition: background 250ms, transform 500ms;
+      transition: background 250ms, border-radius 250ms, transform 500ms;
       color: #fff;
+      text-decoration: none;
+      line-height: 1;
+      font-size: 1.75rem;
+
+      i {
+        vertical-align: -20%;
+      }
 
       &:hover {
         background-position: 0 100%;
+        border-radius: 50%;
       }
 
       &.active {

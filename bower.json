@@ -1,15 +1,7 @@
 {
-  "name": "PortfolioV2",
+  "name": "portfolio2",
   "private": true,
   "dependencies": {
     "zepto": "^1.2.0"
-  },
-  "overrides": {
-    "font-awesome": {
-      "main": [
-        "scss/font-awesome.scss",
-        "fonts/*"
-      ]
-    }
   }
 }

@@ -48,15 +48,18 @@ $(document).ready(function () {
   function scrollTo(to, duration, cb) {
     var cosParameter = (getScrollPos() - to) / 2,
       scrollCount = 0,
-      oldTimestamp = window.performance.now();
+      oldTimestamp  = window.performance.now();
 
-    function step (newTimestamp) {
+    function step(newTimestamp) {
       scrollCount += Math.PI / (duration / (newTimestamp - oldTimestamp));
 
       if (scrollCount >= Math.PI) {
+        window.scrollTo(0, to); //ensures we actually end up at the right place, not slightly off it
+
         if ($.isFunction(cb)) {
           cb();
         }
+
         return;
       }
 

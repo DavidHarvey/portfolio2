@@ -254,7 +254,6 @@ $(document).ready(function () {
 
         if (initialLoad) {
           window.scrollTop = $target.offset().top;
-          $(window).trigger('resize');
           afterPopScroll();
 
         } else {
@@ -468,9 +467,12 @@ $(document).ready(function () {
 
   $sectionIntro.addClass('active');
 
-  $(window).trigger('resize');
   $(window).trigger('popstate');
-  $(window).trigger('scroll');
+
+  setTimeout(function() {
+    $(window).trigger('resize');
+    $(window).trigger('scroll');
+  }, 100);
 
   initialLoad = false;
 });

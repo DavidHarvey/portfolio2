@@ -1,10 +1,6 @@
-window.onload = function() {
-    $(window).trigger('resize', [true]);
-    $(window).trigger('scroll', [true]);
-};
-
-$(document).ready(function () {
+Zepto(function($) {
   //Cached elements
+  var $window = $window;
   var $mainNav = $('#main-nav');
   var $navLogo = $mainNav.children('.logo');
 
@@ -77,7 +73,7 @@ $(document).ready(function () {
 
   function gotoPage(page) {
     history.replaceState({page: page}, '', page === 'home' ? '/' : page);
-    $(window).trigger('popstate');
+    $window.trigger('popstate');
   }
 
   function getSectionElement(sectionName) {
@@ -152,7 +148,7 @@ $(document).ready(function () {
    * Events
    **********************************/
 
-  $(window).on('scroll', function(e, force) {
+  $window.on('scroll', function(e, force) {
     var currentY = getScrollPos();
     //Only update on vertical scroll change
     if (prevY !== currentY || force) {
@@ -221,7 +217,7 @@ $(document).ready(function () {
     }
   });
 
-  $(window).on('resize', function(e, force) {
+  $window.on('resize', function(e, force) {
     var currentW = document.documentElement.clientWidth;
     //Only update on width change
     if (prevW !== currentW || force) {
@@ -247,7 +243,7 @@ $(document).ready(function () {
     return false;
   });
 
-  $(window).on('popstate', function() {
+  $window.on('popstate', function() {
     var page = history.state && history.state.page ? history.state.page : location.pathname.substring(1);
     previousSection = currentSection;
     currentSection = page !== '' ? page : 'home';
@@ -260,7 +256,9 @@ $(document).ready(function () {
         preventScrollSectionChange = true;
 
         if (initialLoad) {
-          window.scrollTop = $target.offset().top;
+          if ($target.offset().top) {
+              window.scrollTo(0, $target.offset().top);
+          }
           afterPopScroll();
 
         } else {
@@ -474,13 +472,23 @@ $(document).ready(function () {
 
   $sectionIntro.addClass('active');
 
-  $(window).trigger('resize');
-  $(window).trigger('popstate');
-  $(window).trigger('scroll');
+  $window.trigger('resize');
+  $window.trigger('popstate');
+  $window.trigger('scroll');
 
   initialLoad = false;
 
   window.dhDebug = function() {
     console.log(scrollPoints);
   };
+
+  function debugUpdate() {
+    $window.trigger('resize', [true]);
+    $window.trigger('scroll', [true]);
+  }
+  setTimeout(debugUpdate, 100);
+  setTimeout(debugUpdate, 200);
+  setTimeout(debugUpdate, 300);
+  setTimeout(debugUpdate, 400);
+  setTimeout(debugUpdate, 500);
 });

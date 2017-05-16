@@ -1,3 +1,8 @@
+window.onload = function() {
+    $(window).trigger('resize', [true]);
+    $(window).trigger('scroll', [true]);
+};
+
 $(document).ready(function () {
   //Cached elements
   var $mainNav = $('#main-nav');
@@ -147,10 +152,10 @@ $(document).ready(function () {
    * Events
    **********************************/
 
-  $(window).scroll(function() {
+  $(window).on('scroll', function(e, force) {
     var currentY = getScrollPos();
     //Only update on vertical scroll change
-    if (prevY !== currentY) {
+    if (prevY !== currentY || force) {
       var viewHeight = document.documentElement.clientHeight;
 
       if (!preventScrollSectionChange && !initialLoad) {
@@ -216,10 +221,10 @@ $(document).ready(function () {
     }
   });
 
-  $(window).resize(function() {
+  $(window).on('resize', function(e, force) {
     var currentW = document.documentElement.clientWidth;
     //Only update on width change
-    if (prevW !== currentW) {
+    if (prevW !== currentW || force) {
       console.log('Resize fired', $skillsParticles.offset().top);
 
       //Update scroll detection points
@@ -474,13 +479,6 @@ $(document).ready(function () {
   $(window).trigger('scroll');
 
   initialLoad = false;
-
-  window.onload = function() {
-    prevW = null;
-    prevY = null;
-    $(window).trigger('resize');
-    $(window).trigger('scroll');
-  };
 
   window.dhDebug = function() {
     console.log(scrollPoints);

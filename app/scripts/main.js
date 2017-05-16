@@ -220,6 +220,8 @@ $(document).ready(function () {
     var currentW = document.documentElement.clientWidth;
     //Only update on width change
     if (prevW !== currentW) {
+      console.log('Resize fired', $skillsParticles.offset().top);
+
       //Update scroll detection points
       scrollPoints.navBg = $introMiddle.offset().top;
       scrollPoints.navLogo = $introLogo.offset().top + $introLogo.height();
@@ -467,12 +469,13 @@ $(document).ready(function () {
 
   $sectionIntro.addClass('active');
 
+  $(window).trigger('resize');
   $(window).trigger('popstate');
-
-  setTimeout(function() {
-    $(window).trigger('resize');
-    $(window).trigger('scroll');
-  }, 100);
+  $(window).trigger('scroll');
 
   initialLoad = false;
+
+  window.dhDebug = function() {
+    console.log(scrollPoints);
+  };
 });

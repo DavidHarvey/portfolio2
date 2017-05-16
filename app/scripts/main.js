@@ -254,6 +254,7 @@ $(document).ready(function () {
 
         if (initialLoad) {
           window.scrollTop = $target.offset().top;
+          $(window).trigger('resize');
           afterPopScroll();
 
         } else {

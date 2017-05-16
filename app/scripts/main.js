@@ -25,8 +25,8 @@ $(document).ready(function () {
 
   //State tracking
   var initialLoad = true;
-  var prevY = 0;
-  var prevW = 0;
+  var prevY = null;
+  var prevW = null;
   var scrollPoints = {};
   var scrollInElements = [];
   var previousSection = '';

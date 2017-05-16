@@ -475,14 +475,14 @@ $(document).ready(function () {
 
   initialLoad = false;
 
-  window.dhDebug = function() {
-    console.log(scrollPoints);
-  };
-});
-
-$(window).load(function() {
+  window.onload = function() {
     prevW = null;
     prevY = null;
     $(window).trigger('resize');
     $(window).trigger('scroll');
+  };
+
+  window.dhDebug = function() {
+    console.log(scrollPoints);
+  };
 });

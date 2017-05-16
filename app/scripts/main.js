@@ -1,6 +1,6 @@
 Zepto(function($) {
   //Cached elements
-  var $window = $window;
+  var $window = $(window);
   var $mainNav = $('#main-nav');
   var $navLogo = $mainNav.children('.logo');
 

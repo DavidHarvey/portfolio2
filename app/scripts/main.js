@@ -473,16 +473,16 @@ $(document).ready(function () {
   $(window).trigger('popstate');
   $(window).trigger('scroll');
 
-  setTimeout(function() {
-    prevW = null;
-    prevY = null;
-    $(window).trigger('resize');
-    $(window).trigger('scroll');
-  }, 500);
-
   initialLoad = false;
 
   window.dhDebug = function() {
     console.log(scrollPoints);
   };
+});
+
+$(window).load(function() {
+    prevW = null;
+    prevY = null;
+    $(window).trigger('resize');
+    $(window).trigger('scroll');
 });

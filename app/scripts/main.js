@@ -474,8 +474,10 @@ $(document).ready(function () {
   $(window).trigger('scroll');
 
   setTimeout(function() {
-      $(window).trigger('resize');
-      $(window).trigger('scroll');
+    prevW = null;
+    prevY = null;
+    $(window).trigger('resize');
+    $(window).trigger('scroll');
   }, 500);
 
   initialLoad = false;

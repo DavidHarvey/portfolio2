@@ -217,7 +217,7 @@ Zepto(function($) {
     }
   });
 
-  $window.on('resize', function(e, force) {
+  function resizeHandler(force) {
     var currentW = document.documentElement.clientWidth;
     //Only update on width change
     if (prevW !== currentW || force) {
@@ -236,6 +236,10 @@ Zepto(function($) {
 
       prevW = currentW;
     }
+  }
+
+  $window.on('resize', function() {
+    resizeHandler();
   });
 
   $('a[href^="/"]').not('[href*="."]').not('[target="_blank"]').click(function() {
@@ -472,7 +476,7 @@ Zepto(function($) {
 
   $sectionIntro.addClass('active');
 
-  $window.trigger('resize');
+  resizeHandler();
   $window.trigger('popstate');
   $window.trigger('scroll');
 
@@ -482,13 +486,7 @@ Zepto(function($) {
     console.log(scrollPoints);
   };
 
-  function debugUpdate() {
-    $window.trigger('resize', [true]);
-    $window.trigger('scroll', [true]);
-  }
-  setTimeout(debugUpdate, 100);
-  setTimeout(debugUpdate, 200);
-  setTimeout(debugUpdate, 300);
-  setTimeout(debugUpdate, 400);
-  setTimeout(debugUpdate, 500);
+  setTimeout(function() {
+    resizeHandler(true);
+  }, 500);
 });

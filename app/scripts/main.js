@@ -473,6 +473,11 @@ $(document).ready(function () {
   $(window).trigger('popstate');
   $(window).trigger('scroll');
 
+  setTimeout(function() {
+      $(window).trigger('resize');
+      $(window).trigger('scroll');
+  }, 500);
+
   initialLoad = false;
 
   window.dhDebug = function() {

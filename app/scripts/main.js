@@ -1,5 +1,6 @@
 Zepto(function($) {
   //Cached elements
+  var $body = $('body');
   var $window = $(window);
   var $mainNav = $('#main-nav');
   var $navLogo = $mainNav.children('.logo');
@@ -27,8 +28,6 @@ Zepto(function($) {
   //State tracking
   var initialLoad = true;
   var prevY = null;
-  var prevW = null;
-  var scrollPoints = {};
   var scrollInElements = [];
   var previousSection = '';
   var currentSection = '';
@@ -93,12 +92,14 @@ Zepto(function($) {
     return Math.max(0, t>0? Math.min(elH, H-t) : (b<H?b:H));
   }
 
-  function registerScrollInEvent($el, handler, offset) {
+  function isVisible(currentY, viewHeight, $el, offset) {
+    return (currentY + viewHeight) > $el.offset().top + offset;
+  }
+
+  function registerScrollInEvent($el, offset) {
     scrollInElements.push({
-      pos: 99999999,
-      offset: offset ? offset : 0,
       $el: $el,
-      handler: handler
+      offset: offset ? offset : 0
     });
   }
 
@@ -167,24 +168,24 @@ Zepto(function($) {
       }
 
       //Toggle a dark bg on nav
-      if (currentY >= scrollPoints.navBg && !$mainNav.hasClass('has-bg')) {
+      if (currentY >= $introMiddle.offset().top && !$mainNav.hasClass('has-bg')) {
         $mainNav.addClass('has-bg');
-      } else if (currentY < scrollPoints.navBg && $mainNav.hasClass('has-bg')) {
+      } else if (currentY < $introMiddle.offset().top && $mainNav.hasClass('has-bg')) {
         $mainNav.removeClass('has-bg');
       }
 
       //Show logo in nav if we scrolled passed the one in intro
-      if (currentY >= scrollPoints.navLogo && !$mainNav.hasClass('has-logo')) {
+      if (currentY >= $introLogo.offset().top + $introLogo.height() && !$mainNav.hasClass('has-logo')) {
         $navLogo.attr('aria-hidden', false);
         $mainNav.addClass('has-logo');
-      } else if (currentY < scrollPoints.navLogo && $mainNav.hasClass('has-logo')) {
+      } else if (currentY < $introLogo.offset().top + $introLogo.height() && $mainNav.hasClass('has-logo')) {
         $navLogo.attr('aria-hidden', true);
         $mainNav.removeClass('has-logo');
       }
 
       //Don't need to animate intro particles if we can't see them!
       if (introParticles) {
-        var visible = currentY < scrollPoints.introParticles;
+        var visible = currentY < $introParticles.offset().top + $introParticles.height();
         if (!introParticles.active && visible) {
           particlesJS.resume(introParticles);
         } else if (introParticles.active && !visible) {
@@ -194,8 +195,8 @@ Zepto(function($) {
 
       //Same with the skills particles
       if (skillsParticles) {
-        var visible = currentY + viewHeight > scrollPoints.skillsParticlesTop &&
-                      currentY < scrollPoints.skillsParticlesBottom;
+        var visible = currentY + viewHeight > $skillsParticles.offset().top &&
+                      currentY < $skillsParticles.offset().top + $skillsParticles.height();
         if (!skillsParticles.active && visible) {
           particlesJS.resume(skillsParticles);
         } else if (skillsParticles.active && !visible) {
@@ -207,39 +208,14 @@ Zepto(function($) {
       var s = scrollInElements.length;
       while (s--) {
         var scrollIn = scrollInElements[s];
-        if ((currentY + viewHeight) > scrollIn.pos) {
-          scrollIn.handler(scrollIn.$el);
+        if (currentY + viewHeight >= $body.height() || isVisible(currentY, viewHeight, scrollIn.$el, scrollIn.offset)) {
+          scrollIn.$el.addClass('active');
           scrollInElements.splice(scrollInElements.indexOf(scrollIn), 1);
         }
       }
 
       prevY = currentY;
     }
-  });
-
-  function resizeHandler(force) {
-    var currentW = document.documentElement.clientWidth;
-    //Only update on width change
-    if (prevW !== currentW || force) {
-      console.log('Resize fired', $skillsParticles.offset().top);
-
-      //Update scroll detection points
-      scrollPoints.navBg = $introMiddle.offset().top;
-      scrollPoints.navLogo = $introLogo.offset().top + $introLogo.height();
-      scrollPoints.introParticles = $introParticles.offset().top + $introParticles.height();
-      scrollPoints.skillsParticlesTop = $skillsParticles.offset().top;
-      scrollPoints.skillsParticlesBottom = scrollPoints.skillsParticlesTop + $skillsParticles.height();
-
-      $.each(scrollInElements, function(key, scrollIn) {
-        scrollIn.pos = scrollIn.$el.offset().top + scrollIn.offset;
-      });
-
-      prevW = currentW;
-    }
-  }
-
-  $window.on('resize', function() {
-    resizeHandler();
   });
 
   $('a[href^="/"]').not('[href*="."]').not('[target="_blank"]').click(function() {
@@ -410,51 +386,35 @@ Zepto(function($) {
    **********************************/
 
   $sections.not($sectionIntro).find('header .title').each(function(i, el) {
-    registerScrollInEvent($(el), function($el) {
-      $el.addClass('active');
-    }, 100);
+    registerScrollInEvent($(el));
   });
 
   $sectionWork.find('.showcase .item .logo').each(function(i, el) {
-    registerScrollInEvent($(el), function ($el) {
-      $el.addClass('active');
-    }, 100);
+    registerScrollInEvent($(el));
   });
 
   $sectionWork.find('.showcase .item .info').each(function(i, el) {
-    registerScrollInEvent($(el), function ($el) {
-      $el.addClass('active');
-    }, 100);
+    registerScrollInEvent($(el));
   });
 
   $sectionSkills.find('article > p, .resume').each(function(i, el) {
-    registerScrollInEvent($(el), function ($el) {
-      $el.addClass('active');
-    });
+    registerScrollInEvent($(el));
   });
 
   $sectionSkills.find('article > ul li').each(function(i, el) {
-    registerScrollInEvent($(el), function ($el) {
-      $el.addClass('active');
-    });
+    registerScrollInEvent($(el));
   });
 
   $sectionContact.find('article > p, form button[type="submit"]').each(function(i, el) {
-    registerScrollInEvent($(el), function ($el) {
-      $el.addClass('active');
-    });
+    registerScrollInEvent($(el));
   });
 
   $sectionContact.find('form > fieldset').each(function(i, el) {
-    registerScrollInEvent($(el), function ($el) {
-      $el.addClass('active');
-    }, ($(el).height() / 4) * -1);
+    registerScrollInEvent($(el), ($(el).height() / 4) * -1);
   });
 
   $sectionContact.find('.social a').each(function(i, el) {
-    registerScrollInEvent($(el), function ($el) {
-      $el.addClass('active');
-    });
+    registerScrollInEvent($(el));
   });
 
 
@@ -476,17 +436,8 @@ Zepto(function($) {
 
   $sectionIntro.addClass('active');
 
-  resizeHandler();
   $window.trigger('popstate');
   $window.trigger('scroll');
 
   initialLoad = false;
-
-  window.dhDebug = function() {
-    console.log(scrollPoints);
-  };
-
-  setTimeout(function() {
-    resizeHandler(true);
-  }, 500);
 });
